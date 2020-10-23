@@ -5,9 +5,12 @@ import Box from './Box';
 
 import Dbr from './Dbr';
 import ZXing from './ZXing';
+import Quagga from './Quagga';
+import LeadTools from './LeadTools';
+import Scandit from './Scandit';
 
 function App() {
-  const testImg = 'http://localhost:3000/114514.png'
+  const testImg = 'http://localhost:3000/actual_sample_2.jpg'
   return (
     <div className="App">
       <header className="App-header">
@@ -25,7 +28,16 @@ function App() {
             />
           </Box>
           <Box>
-            <ZXing testSource={testImg}/>
+            <ZXing testSource={testImg} />
+          </Box>
+          <Box>
+            <Quagga testSource={testImg} />
+          </Box>
+          {/* <Box>
+            <LeadTools testSource={testImg} />
+          </Box> */}
+          <Box>
+            <Scandit testSource={testImg} />
           </Box>
         </div>
       </main>

@@ -31,10 +31,14 @@ class Dbr extends React.Component {
     const reader = this.reader
 
     const startTime = Date.now()
-    for (let i = 0; i < 100; i++) {
-      await reader.decode(this.props.testSource)
+    let results
+    for (let i = 0; i < 1; i++) {
+      results = await reader.decode(this.props.testSource)
     }
     const endTime = Date.now()
+    console.log('========dynamic barcode reader========')
+    console.log(results)
+    console.log('======================================')
     this.setState({ processTime: endTime-startTime })
   }
 
