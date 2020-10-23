@@ -42,17 +42,22 @@ class ZXing extends React.Component {
 
     const startTime = Date.now()
     // console.log(reader)
-    for (let i = 0; i < 100; i++) {
+    let results
+    for (let i = 0; i < 1; i++) {
       // let result = await reader.decodeFromImageUrl('http://localhost:3000/test.png')
       try {
         // let result = await reader.decodeBitmap(binaryBitmap, hints)
-        let result = await reader.decodeFromImageUrl(this.props.testSource)
+        results = await reader.decodeFromImageUrl(this.props.testSource)
         // console.log(result)
       } catch (err) {
         console.error(err)
       }
     }
     const endTime = Date.now()
+
+    console.log('========dynamic barcode reader========')
+    console.log(results)
+    console.log('======================================')
 
     this.setState({
       processTime: endTime-startTime

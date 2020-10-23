@@ -8,9 +8,11 @@
     "@testing-library/user-event": "^7.2.1",
     "@zxing/library": "^0.18.2",
     "dynamsoft-javascript-barcode": "^7.6.0",
+    "quagga": "^0.12.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-scripts": "3.4.4"
+    "react-scripts": "3.4.4",
+    "scandit-sdk": "^5.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
