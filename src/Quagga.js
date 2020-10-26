@@ -55,6 +55,9 @@ class Quagga extends React.Component {
         <p style={{fontSize: '24px'}} >{resultText}</p>
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
         <img id='quagga-dom' src={this.props.testSource} style={{ display: 'none' }} />
+        <div style={{fontStyle: 'italic', marginTop: '0.5rem'}}>
+          * Quagga.js does not support any 2D code format.
+        </div>
       </div>
     )
   }
