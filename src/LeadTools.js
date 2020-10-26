@@ -1,5 +1,4 @@
 import React from 'react'
-import 'jquery'
 
 const Document = window.lt.Document
 
