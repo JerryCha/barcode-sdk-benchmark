@@ -7,7 +7,8 @@ class ZXing extends React.Component {
     super(props)
 
     this.state = {
-      processTime: null
+      processTime: null,
+      results: []
     }
 
     this.benchmark = this.benchmark.bind(this)
@@ -21,9 +22,9 @@ class ZXing extends React.Component {
     const reader = this.reader
     const hints = new Map()
     const formats = [
-      // BarcodeFormat.QR_CODE, 
+      BarcodeFormat.QR_CODE, 
       BarcodeFormat.CODE_128, 
-      // BarcodeFormat.CODE_39
+      BarcodeFormat.CODE_39
     ]
     hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
 
@@ -47,10 +48,11 @@ class ZXing extends React.Component {
       // let result = await reader.decodeFromImageUrl('http://localhost:3000/test.png')
       try {
         // let result = await reader.decodeBitmap(binaryBitmap, hints)
-        results = await reader.decodeFromImageUrl(this.props.testSource)
+        results = [await reader.decodeFromImageUrl(this.props.testSource)]
         // console.log(result)
       } catch (err) {
         console.error(err)
+        results = []
       }
     }
     const endTime = Date.now()
@@ -60,25 +62,32 @@ class ZXing extends React.Component {
     console.log('======================================')
 
     this.setState({
-      processTime: endTime-startTime
+      processTime: endTime-startTime,
+      results: results
     })
   }
 
   render() {
     const processTime = this.state.processTime
     let resultText
+    const results = this.state.results
+    let resultsDisplay = ''
     if (processTime === null)
       resultText = 'Not Run'
     else if (processTime === 'Running...')
       resultText = processTime
     else
       resultText = (processTime/1000) + ' seconds'
+    if (processTime) {
+      resultsDisplay = <p>{results.length} codes found.</p>
+    }
 
     return (
       <div id="zxing">
         <h2>ZXing JavaScript Port</h2>
         <p>Version: 0.18.2</p>
         <p style={{fontSize: '24px'}} >{resultText}</p>
+        {resultsDisplay}
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
         {/* <img src="/test.png" style={{display: 'none'}} id="test-img" /> */}
         <div style={{fontStyle: 'italic', marginTop: '0.5rem'}}>

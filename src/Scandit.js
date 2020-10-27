@@ -7,7 +7,8 @@ class Scandit extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      processTime: null
+      processTime: null,
+      results: []
     }
 
     this.benchmark = this.benchmark.bind(this)
@@ -25,7 +26,11 @@ class Scandit extends React.Component {
     })
     // Specify settings
     const scanSettings = await new ScanditSDK.ScanSettings({
-      enabledSymbologies: ["qr", "ean8", "ean13", "upca", "upce", "code128", "code39", "code93", "itf"],
+      enabledSymbologies: [
+        "qr", "ean8", "ean13", "upca", 
+        "upce", "code128", "code39", 
+        "code93", "itf"
+      ],
       codeDuplicateFilter: 1000, // following the example setting
       
     })
@@ -46,24 +51,27 @@ class Scandit extends React.Component {
     imgElement.src = this.props.testSource
 
     const scanner = this.scanner
-
-    const imageSettings = {
-      width: imgElement.width,
-      height: imgElement.height,
-      format: ImageSettings.Format.RGBA_8U
-    }
-    imgElement.onload = async () => {
-    scanner.applyImageSettings(imageSettings)
     
-    this.setState({ processTime: 'Running...' })
-    const startTime = Date.now()
-    let results = await scanner.processImage(imgElement, true)
-    const endTime = Date.now()
-    console.log('======== scandit sdk ========')
-    console.log(results)
-    console.log('=============================')
-    this.setState({ processTime: endTime-startTime })
-    console.log(scanner)
+    imgElement.onload = async () => {
+      const imageSettings = {
+        width: imgElement.width,
+        height: imgElement.height,
+        format: ImageSettings.Format.RGBA_8U
+      }
+      scanner.applyImageSettings(imageSettings)
+      
+      this.setState({ processTime: 'Running...' })
+      const startTime = Date.now()
+      let results = await scanner.processImage(imgElement, true)
+      const endTime = Date.now()
+      console.log('======== scandit sdk ========')
+      console.log(results)
+      console.log('=============================')
+      this.setState({
+        processTime: endTime-startTime, 
+        results: results.barcodes
+      })
+      console.log(scanner)
     }
     
   }
@@ -71,17 +79,24 @@ class Scandit extends React.Component {
   render () {
     const processTime = this.state.processTime
     let resultText;
+    const results = this.state.results
+    let resultsDisplay = ''
     if (processTime === null)
       resultText = 'Not Run'
     else if (processTime === 'Running...')
       resultText = processTime
     else
       resultText = (processTime/1000) + ' seconds'
+    if (processTime) {
+      resultsDisplay = <p>{results.length} codes found.</p>
+    }
+
     return (
       <div className="instance" id="scandit">
         <h2>Scandit Barcode SDK</h2>
         <p>Version: 5.3.1</p>
         <p style={{fontSize: '24px'}} >{resultText}</p>
+        {resultsDisplay}
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
       </div>
     )

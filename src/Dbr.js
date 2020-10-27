@@ -12,7 +12,8 @@ class Dbr extends React.Component {
     dbr.BarcodeReader.engineResourcePath = enginePath
     
     this.state = {
-      processTime: null
+      processTime: null,
+      results: []
     }
 
     this.benchmark = this.benchmark.bind(this)
@@ -40,23 +41,30 @@ class Dbr extends React.Component {
     console.log(results)
     console.log('======================================')
     this.setState({ processTime: endTime-startTime })
+    this.setState({ results: results })
   }
 
   render() {
     const processTime = this.state.processTime
-    let resultText;
+    let resultIndicator;
+    const results = this.state.results
+    let resultsDisplay = ''
     if (processTime === null)
-      resultText = 'Not Run'
+      resultIndicator = 'Not Run'
     else if (processTime === 'Running...')
-      resultText = processTime
+      resultIndicator = processTime
     else
-      resultText = (processTime/1000) + ' seconds'
+      resultIndicator = (processTime/1000) + ' seconds'
+    if (processTime) {
+      resultsDisplay = <p>{results.length} codes found.</p>
+    }
 
     return (
       <div className="instance" id="dbr">
         <h2>Dynamic Barcode Reader</h2>
         <p>Version: 7.6.0</p>
-        <p style={{fontSize: '24px'}} >{resultText}</p>
+        <p style={{fontSize: '24px'}} >{resultIndicator}</p>
+        {resultsDisplay}
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
       </div>
     )

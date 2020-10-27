@@ -11,13 +11,14 @@ import Scandit from './Scandit';
 import BarcodeXpress from './Xpress';
 
 function App() {
+  // const testImg = 'http://localhost:3000/114514.png'
   const testImg = 'http://localhost:3000/test.png'
   return (
     <div className="App">
       <header className="App-header">
         <h1>Barcode SDK Benchmarking</h1>
         <p>For internal use only</p>
-        <p>Each SDK would be tested with a <a href={testImg} target="_blank">sample image</a> for 100 times.</p>
+        <p>Each SDK would be tested with a <a href={testImg} target="_blank" rel="noreferrer noopener">sample image</a> for 100 times.</p>
       </header>
       <main>
         <div id="instance-wrap">

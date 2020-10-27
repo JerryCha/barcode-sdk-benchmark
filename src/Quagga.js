@@ -6,7 +6,8 @@ class Quagga extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      processTime: null
+      processTime: null,
+      results: []
     }
     this.benchmark = this.benchmark.bind(this)
     this.decodeCounter = 0
@@ -37,7 +38,16 @@ class Quagga extends React.Component {
       src: this.props.testSource
     }, (result) => { 
       const endTime = Date.now()
-      this.setState({ processTime: endTime-startTime })
+      this.setState({ 
+        processTime: endTime-startTime,
+        results: (() => {
+          if (result && result.codeResult!==undefined) {
+            return [result.codeResult]
+          } else {
+            return []
+          }
+        })()
+      })
       console.log(result) 
     })
   }
@@ -45,18 +55,24 @@ class Quagga extends React.Component {
   render() {
     const processTime = this.state.processTime
     let resultText;
+    const results = this.state.results
+    let resultsDisplay = ''
     if (processTime === null)
       resultText = 'Not Run'
     else if (processTime === 'Running...')
       resultText = processTime
     else
       resultText = (processTime/1000) + ' seconds'
+    if (processTime) {
+      resultsDisplay = <p>{results.length} codes found.</p>
+    }
 
     return (
       <div className="instance" id="dbr">
         <h2>Quagga.js</h2>
         <p>Version: 0.12.1</p>
         <p style={{fontSize: '24px'}} >{resultText}</p>
+        {resultsDisplay}
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
         <div style={{fontStyle: 'italic', marginTop: '0.5rem'}}>
           * Quagga.js does not support any 2D code format.
