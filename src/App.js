@@ -47,6 +47,9 @@ function App() {
             <BarcodeXpress testSource={testImg} />
           </Box>
         </div>
+        <div id="img-wrap">
+          {/* <img id="test-sample" src={testImg} alt="test sample" style={{ width: '800px' }}/> */}
+        </div>
       </main>
     </div>
   );

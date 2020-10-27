@@ -31,14 +31,14 @@ class ZXing extends React.Component {
 
     // console.log(hints)
     // Get the test image
-    const imgElement = document.getElementById('test-img')
-    const cvs = new OffscreenCanvas(imgElement.width, imgElement.height)
-    const ctx = cvs.getContext('2d')
-    ctx.drawImage(imgElement, 0, 0)
-    const data = ctx.getImageData(0, 0, cvs.width, cvs.height)
+    // const imgElement = document.getElementById('test-img')
+    // const cvs = new OffscreenCanvas(imgElement.width, imgElement.height)
+    // const ctx = cvs.getContext('2d')
+    // ctx.drawImage(imgElement, 0, 0)
+    // const data = ctx.getImageData(0, 0, cvs.width, cvs.height)
 
-    const src = new RGBLuminanceSource(data.data, data.width, data.height)
-    const binaryBitmap = new BinaryBitmap(new HybridBinarizer(src))
+    // const src = new RGBLuminanceSource(data.data, data.width, data.height)
+    // const binaryBitmap = new BinaryBitmap(new HybridBinarizer(src))
 
     const startTime = Date.now()
     // console.log(reader)
@@ -80,7 +80,7 @@ class ZXing extends React.Component {
         <p>Version: 0.18.2</p>
         <p style={{fontSize: '24px'}} >{resultText}</p>
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
-        <img src="/test.png" style={{display: 'none'}} id="test-img" />
+        {/* <img src="/test.png" style={{display: 'none'}} id="test-img" /> */}
         <div style={{fontStyle: 'italic', marginTop: '0.5rem'}}>
           Note that ZXing JavaScript could not decode multiple code at the same time. 
           It would decode the first matched code and return its result.
