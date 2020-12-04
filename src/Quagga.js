@@ -6,7 +6,8 @@ class Quagga extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      processTime: null
+      processTime: null,
+      results: []
     }
     this.benchmark = this.benchmark.bind(this)
     this.decodeCounter = 0
@@ -15,46 +16,64 @@ class Quagga extends React.Component {
   async benchmark() {
     this.setState({ processTime: 'Running...' })
 
-      quagga.decodeSingle({
-        inputStream: {
-          width: 1600,
-          singleChannel: false
-        },
-        locator: {
-          patchSize: 'medium',
-          halfSample: false
-        },
-        decoder: {
-          multi: true,
-          readers: [
-            'code_128_reader', 'code_39_reader', 'codabar_reader', 
-            'code_93_reader', 'code_39_vin_reader', 'upc_reader',
-            'upc_e_reader', 'i2of5_reader', '2of5_reader'
-          ]
-        },
-        locate: true,
-        src: this.props.testSource
-    }, function(result) { console.log(result) })
-    
+    const startTime = Date.now()
+    quagga.decodeSingle({
+      inputStream: {
+        width: 1600,
+        singleChannel: false
+      },
+      locator: {
+        patchSize: 'medium',
+        halfSample: false
+      },
+      decoder: {
+        multi: true,
+        readers: [
+          'code_128_reader', 'code_39_reader', 'codabar_reader', 
+          'code_93_reader', 'code_39_vin_reader', 'upc_reader',
+          'upc_e_reader', 'i2of5_reader', '2of5_reader'
+        ]
+      },
+      locate: true,
+      src: this.props.testSource
+    }, (result) => { 
+      const endTime = Date.now()
+      this.setState({ 
+        processTime: endTime-startTime,
+        results: (() => {
+          if (result && result.codeResult!==undefined) {
+            return [result.codeResult]
+          } else {
+            return []
+          }
+        })()
+      })
+      console.log(result) 
+    })
   }
 
   render() {
     const processTime = this.state.processTime
     let resultText;
+    const results = this.state.results
+    let resultsDisplay = ''
     if (processTime === null)
       resultText = 'Not Run'
     else if (processTime === 'Running...')
       resultText = processTime
     else
       resultText = (processTime/1000) + ' seconds'
+    if (processTime) {
+      resultsDisplay = <p>{results.length} codes found.</p>
+    }
 
     return (
       <div className="instance" id="dbr">
         <h2>Quagga.js</h2>
         <p>Version: 0.12.1</p>
         <p style={{fontSize: '24px'}} >{resultText}</p>
+        {resultsDisplay}
         <button className="btn-primary" onClick={this.benchmark}>Run</button>
-        <img id='quagga-dom' src={this.props.testSource} style={{ display: 'none' }} />
         <div style={{fontStyle: 'italic', marginTop: '0.5rem'}}>
           * Quagga.js does not support any 2D code format.
         </div>
